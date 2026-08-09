@@ -29,9 +29,9 @@ export async function onRequestPost(context) {
             return new Response(
                 JSON.stringify({
                     success: false,
-                    error: 'RESEND_API_KEY environment variable is missing in Cloudflare Pages. Please add RESEND_API_KEY in Cloudflare Dashboard (Settings > Environment Variables) and redeploy.',
+                    error: 'RESEND_API_KEY environment variable is missing in Cloudflare Pages dashboard. Please go to Cloudflare Dashboard > Workers & Pages > Settings > Environment Variables, add RESEND_API_KEY with your Resend API Key, and redeploy.',
                 }),
-                { status: 400, headers: corsHeaders }
+                { status: 200, headers: corsHeaders }
             );
         }
 
@@ -146,14 +146,14 @@ export async function onRequestPost(context) {
             console.error('Resend Admin Email Error:', adminResData);
             let errorMsg = adminResData.message || 'Failed to send admin notification email.';
             if (errorMsg.includes('testing emails') || errorMsg.includes('own email address') || errorMsg.includes('verify')) {
-                errorMsg += ' Note: With Resend free tier (onboarding@resend.dev), emails can only be sent to the email address registered with your Resend account. Please add/verify your domain (e.g. apindustries.in) in Resend dashboard to send to any recipient.';
+                errorMsg += ' Note: With Resend free tier (onboarding@resend.dev), emails can only be sent to the email address registered with your Resend account. Please add & verify your custom domain in Resend dashboard to send to info.apindustries14@gmail.com.';
             }
             return new Response(
                 JSON.stringify({
                     success: false,
                     error: errorMsg
                 }),
-                { status: 400, headers: corsHeaders }
+                { status: 200, headers: corsHeaders }
             );
         }
 
