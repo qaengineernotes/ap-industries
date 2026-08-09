@@ -70,18 +70,107 @@ document.addEventListener('DOMContentLoaded', () => {
         revealOnScroll.observe(el);
     });
 
-    // --- Newsletter Form Submission (Mock) ---
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', (e) => {
+    // --- Form Submissions with Resend.com API ---
+    const inquiryForms = document.querySelectorAll('#message-form, .category-inquiry-form, .newsletter-form');
+
+    inquiryForms.forEach(form => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = newsletterForm.querySelector('input').value;
-            if (email) {
-                alert(`Thank you for subscribing, ${email}!`);
-                newsletterForm.reset();
+
+            // Get submit button
+            const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('button');
+            const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+
+            // Ensure response banner container exists
+            let banner = form.querySelector('.form-response-banner');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.className = 'form-response-banner';
+                form.insertBefore(banner, form.firstChild);
+            }
+
+            // Reset banner state
+            banner.className = 'form-response-banner';
+            banner.style.display = 'none';
+            banner.textContent = '';
+
+            // Extract input values safely
+            const getValue = (selector) => {
+                const el = form.querySelector(selector);
+                return el ? el.value.trim() : '';
+            };
+
+            const name = getValue('#contact-name') || getValue('#name') || getValue('input[placeholder*="Name"]');
+            const company = getValue('#contact-company') || getValue('#company') || getValue('input[placeholder*="Company"]');
+            const email = getValue('#contact-email') || getValue('#email') || getValue('input[type="email"]');
+            const phone = getValue('#contact-phone') || getValue('#phone') || getValue('input[type="tel"]');
+
+            const subjectSelect = form.querySelector('#contact-subject');
+            let subject = '';
+            if (subjectSelect && subjectSelect.options && subjectSelect.selectedIndex >= 0) {
+                subject = subjectSelect.options[subjectSelect.selectedIndex].text;
+            }
+            if (!subject || subject.includes('Select Subject')) {
+                subject = document.title.split('-')[0].trim() || 'General Inquiry';
+            }
+
+            const message = getValue('#contact-message') || getValue('#message') || getValue('textarea') || 'Newsletter subscription request.';
+
+            // Client-side quick check
+            if (!email && !phone && !name) {
+                banner.className = 'form-response-banner show error';
+                banner.textContent = 'Please fill out your contact details before submitting.';
+                return;
+            }
+
+            // Set loading state
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('btn-loading');
+                submitBtn.innerHTML = '<span class="btn-text">Sending...</span>';
+            }
+
+            try {
+                const response = await fetch('/api/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        company,
+                        email,
+                        phone,
+                        subject,
+                        message,
+                        page: window.location.pathname || document.title
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    banner.className = 'form-response-banner show success';
+                    banner.innerHTML = '<strong>Success!</strong> Your inquiry has been sent to <strong>info.apindustries14@gmail.com</strong>.' +
+                        (email ? ' A confirmation email has also been sent to <strong>' + email + '</strong>.' : '');
+                    form.reset();
+                } else {
+                    banner.className = 'form-response-banner show error';
+                    banner.innerHTML = '<strong>Unable to send:</strong> ' + (result.error || 'Please try again later or contact us directly at info.apindustries14@gmail.com.');
+                }
+            } catch (err) {
+                console.error('Submission Error:', err);
+                banner.className = 'form-response-banner show error';
+                banner.innerHTML = '<strong>Network Error:</strong> Unable to connect to the email server. Please try again or email us directly at <a href="mailto:info.apindustries14@gmail.com">info.apindustries14@gmail.com</a>.';
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('btn-loading');
+                    submitBtn.innerHTML = originalBtnHtml;
+                }
             }
         });
-    }
+    });
 
     // --- Smooth Anchor Navigation ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

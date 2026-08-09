@@ -1,0 +1,5 @@
+name = "ap-industries-website"
+pages_build_output_dir = "."
+
+[vars]
+ADMIN_EMAIL = "info.apindustries14@gmail.com"

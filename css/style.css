@@ -1025,6 +1025,75 @@ footer {
     box-shadow: 0 0 5px rgba(211, 47, 47, 0.2);
 }
 
+/* Form Response Banners & Loading UI */
+.form-response-banner {
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    display: none;
+    animation: fadeInSlide 0.3s ease-in-out forwards;
+}
+
+.form-response-banner.show {
+    display: block;
+}
+
+.form-response-banner.success {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.form-response-banner.error {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.btn-loading .btn-text {
+    visibility: hidden;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 50%;
+    left: 50%;
+    margin-top: -9px;
+    margin-left: -9px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: btnSpinner 0.8s linear infinite;
+}
+
+@keyframes btnSpinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 /* Responsive category styling */
 @media (max-width: 992px) {
     .category-detail-meta {
