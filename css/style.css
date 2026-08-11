@@ -1037,7 +1037,7 @@ footer {
 }
 
 .form-response-banner.show {
-    display: block;
+    display: block !important;
 }
 
 .form-response-banner.success {

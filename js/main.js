@@ -116,10 +116,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const message = getValue('#contact-message') || getValue('#message') || getValue('textarea') || 'Newsletter subscription request.';
 
+            const showBanner = (isSuccess, htmlContent) => {
+                banner.className = 'form-response-banner show ' + (isSuccess ? 'success' : 'error');
+                banner.innerHTML = htmlContent;
+                banner.style.display = 'block';
+                banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            };
+
             // Client-side quick check
             if (!email && !phone && !name) {
-                banner.className = 'form-response-banner show error';
-                banner.textContent = 'Please fill out your contact details before submitting.';
+                showBanner(false, 'Please fill out your contact details before submitting.');
                 return;
             }
 
@@ -150,18 +156,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    banner.className = 'form-response-banner show success';
-                    banner.innerHTML = '<strong>Success!</strong> Your inquiry has been sent to <strong>info.apindustries14@gmail.com</strong>.' +
-                        (email ? ' A confirmation email has also been sent to <strong>' + email + '</strong>.' : '');
+                    showBanner(true, '<strong>Success!</strong> Your inquiry has been sent to <strong>info.apindustries14@gmail.com</strong>.' +
+                        (email ? ' A confirmation email has also been sent to <strong>' + email + '</strong>.' : ''));
                     form.reset();
                 } else {
-                    banner.className = 'form-response-banner show error';
-                    banner.innerHTML = '<strong>Unable to send:</strong> ' + (result.error || 'Please try again later or contact us directly at info.apindustries14@gmail.com.');
+                    showBanner(false, '<strong>Unable to send:</strong> ' + (result.error || 'Please try again later or contact us directly at info.apindustries14@gmail.com.'));
                 }
             } catch (err) {
                 console.error('Submission Error:', err);
-                banner.className = 'form-response-banner show error';
-                banner.innerHTML = '<strong>Network Error:</strong> Unable to connect to the email server. Please try again or email us directly at <a href="mailto:info.apindustries14@gmail.com">info.apindustries14@gmail.com</a>.';
+                showBanner(false, '<strong>Network Error:</strong> Unable to connect to the email server. Please try again or email us directly at <a href="mailto:info.apindustries14@gmail.com">info.apindustries14@gmail.com</a>.');
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
