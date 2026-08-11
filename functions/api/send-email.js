@@ -1,6 +1,7 @@
 /**
  * Cloudflare Pages Function: /api/send-email
  * Integrates Resend.com API to send email notifications for form submissions.
+ * Updated: Environment variable bindings verified.
  */
 
 export async function onRequestOptions() {
