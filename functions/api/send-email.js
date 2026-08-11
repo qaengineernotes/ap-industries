@@ -23,7 +23,7 @@ export async function onRequestPost(context) {
 
     try {
         const env = context.env || {};
-        const apiKey = env.RESEND_API_KEY;
+        const apiKey = env.RESEND_API_KEY || env.resend_api_key || env.RESEND_KEY;
 
         if (!apiKey) {
             return new Response(
