@@ -1,7 +1,6 @@
 /**
  * Cloudflare Pages Function: /api/send-email
  * Integrates Resend.com API to send email notifications for form submissions.
- * Updated: Environment variable bindings verified.
  */
 
 export async function onRequestOptions() {
@@ -58,6 +57,7 @@ export async function onRequestPost(context) {
         const adminEmail = env.ADMIN_EMAIL || 'info.apindustries14@gmail.com';
         const senderEmail = env.SENDER_EMAIL || 'A.P. Industries <onboarding@resend.dev>';
         const formattedDate = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) + ' IST';
+        const logoUrl = 'https://ap-industries.pages.dev/images/logo.png';
 
         // 1. Send Notification Email to Admin (info.apindustries14@gmail.com)
         const adminEmailHtml = `
@@ -65,26 +65,33 @@ export async function onRequestPost(context) {
             <html>
             <head>
                 <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <style>
-                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px; color: #333; }
-                    .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 4px solid #1e3a8a; }
-                    .header { background: #0f172a; color: #ffffff; padding: 25px 30px; text-align: center; }
-                    .header h2 { margin: 0; font-size: 22px; letter-spacing: 0.5px; color: #ffffff; }
-                    .header p { margin: 5px 0 0 0; font-size: 13px; color: #94a3b8; }
+                    body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px; color: #212121; }
+                    .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 5px solid #D32F2F; }
+                    .header-logo { background: #212121; padding: 25px 30px; text-align: center; }
+                    .header-logo img { max-height: 48px; width: auto; vertical-align: middle; }
+                    .header-title { background: #1a1a1a; color: #ffffff; padding: 15px 30px; border-bottom: 1px solid #333; text-align: center; }
+                    .header-title h2 { margin: 0; font-size: 20px; color: #ffffff; letter-spacing: 0.5px; }
+                    .header-title p { margin: 4px 0 0 0; font-size: 13px; color: #9e9e9e; }
                     .content { padding: 30px; }
                     .table-data { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
-                    .table-data td { padding: 12px 15px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
-                    .table-data td.label { font-weight: 600; color: #475569; width: 35%; background: #f8fafc; }
-                    .table-data td.value { color: #0f172a; word-break: break-word; }
-                    .message-box { background: #f8fafc; border-left: 4px solid #3b82f6; padding: 18px; border-radius: 4px; font-size: 15px; line-height: 1.6; color: #1e293b; white-space: pre-wrap; }
-                    .footer { background: #f1f5f9; padding: 15px 30px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; }
+                    .table-data td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
+                    .table-data td.label { font-weight: 600; color: #616161; width: 35%; background: #fafafa; }
+                    .table-data td.value { color: #212121; word-break: break-word; }
+                    .message-box { background: #f8fafc; border-left: 4px solid #D32F2F; padding: 18px; border-radius: 4px; font-size: 14px; line-height: 1.6; color: #212121; white-space: pre-wrap; margin-top: 8px; }
+                    .footer { background: #212121; color: #9e9e9e; padding: 20px 30px; text-align: center; font-size: 12px; border-top: 1px solid #333; }
+                    .footer a { color: #ffffff; text-decoration: none; }
                 </style>
             </head>
             <body>
                 <div class="card">
-                    <div class="header">
+                    <div class="header-logo">
+                        <img src="${logoUrl}" alt="A.P. Industries Logo" />
+                    </div>
+                    <div class="header-title">
                         <h2>New Inquiry Received</h2>
-                        <p>Submitted via A.P. Industries Website (${page})</p>
+                        <p>Source Page: ${escapeHtml(page)}</p>
                     </div>
                     <div class="content">
                         <table class="table-data">
@@ -98,14 +105,14 @@ export async function onRequestPost(context) {
                             </tr>
                             <tr>
                                 <td class="label">Email Address</td>
-                                <td class="value">${email ? `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>` : 'Not provided'}</td>
+                                <td class="value">${email ? `<a href="mailto:${escapeHtml(email)}" style="color: #D32F2F; font-weight: 500;">${escapeHtml(email)}</a>` : 'Not provided'}</td>
                             </tr>
                             <tr>
                                 <td class="label">Phone / Mobile</td>
-                                <td class="value">${phone ? `<a href="tel:${escapeHtml(phone)}">${escapeHtml(phone)}</a>` : 'Not provided'}</td>
+                                <td class="value">${phone ? `<a href="tel:${escapeHtml(phone)}" style="color: #212121; font-weight: 500;">${escapeHtml(phone)}</a>` : 'Not provided'}</td>
                             </tr>
                             <tr>
-                                <td class="label">Subject / Category</td>
+                                <td class="label">Subject / Product</td>
                                 <td class="value">${escapeHtml(subject)}</td>
                             </tr>
                             <tr>
@@ -113,11 +120,12 @@ export async function onRequestPost(context) {
                                 <td class="value">${formattedDate}</td>
                             </tr>
                         </table>
-                        <div style="font-weight:600; margin-bottom: 8px; color: #475569;">Inquiry Details / Message:</div>
+                        <div style="font-weight:600; margin-bottom: 6px; color: #616161; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Message / Specifications:</div>
                         <div class="message-box">${escapeHtml(message)}</div>
                     </div>
                     <div class="footer">
-                        A.P. Industries Automated Notification System
+                        A.P. Industries Automated Notification System<br>
+                        Phase-IV, Pushkar Industrial Hub, Ahmedabad, Gujarat, India
                     </div>
                 </div>
             </body>
@@ -158,7 +166,7 @@ export async function onRequestPost(context) {
             );
         }
 
-        // 2. Send Customer Confirmation Email (if user submitted their email address)
+        // 2. Send Customer Confirmation Email (ONLY IF user submitted an Email address)
         let clientEmailSent = false;
         if (email && email.includes('@')) {
             const customerEmailHtml = `
@@ -166,49 +174,85 @@ export async function onRequestPost(context) {
                 <html>
                 <head>
                     <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <style>
-                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px; color: #333; }
-                        .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 4px solid #1e3a8a; }
-                        .header { background: #0f172a; color: #ffffff; padding: 30px; text-align: center; }
-                        .header h1 { margin: 0 0 5px 0; font-size: 24px; color: #ffffff; letter-spacing: 1px; }
-                        .header p { margin: 0; font-size: 13px; color: #94a3b8; }
-                        .content { padding: 30px; line-height: 1.6; color: #334155; }
-                        .content h3 { color: #0f172a; margin-top: 0; }
-                        .summary-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 20px; margin: 20px 0; }
-                        .summary-box p { margin: 6px 0; font-size: 14px; }
-                        .btn { display: inline-block; background: #1e3a8a; color: #ffffff !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: 600; margin-top: 15px; }
-                        .footer { background: #f1f5f9; padding: 20px 30px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; }
+                        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px; color: #212121; }
+                        .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 5px solid #D32F2F; }
+                        .header { background: #212121; padding: 25px 30px; text-align: center; border-bottom: 3px solid #D32F2F; }
+                        .header img { max-height: 50px; width: auto; vertical-align: middle; }
+                        .header-subtext { color: #bdbdbd; font-size: 12px; margin-top: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
+                        .content { padding: 35px 30px; line-height: 1.6; color: #333333; }
+                        .greeting { font-size: 18px; font-weight: 600; color: #212121; margin-bottom: 15px; }
+                        .body-text { font-size: 15px; color: #424242; margin-bottom: 20px; line-height: 1.6; }
+                        .contact-box { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin: 25px 0; border-left: 4px solid #D32F2F; }
+                        .contact-box h4 { margin: 0 0 12px 0; font-size: 14px; color: #212121; text-transform: uppercase; letter-spacing: 0.5px; }
+                        .contact-item { margin: 8px 0; font-size: 14px; color: #424242; display: flex; align-items: center; }
+                        .contact-item strong { min-width: 80px; color: #212121; }
+                        .contact-item a { color: #D32F2F; text-decoration: none; font-weight: 500; }
+                        .contact-item a:hover { text-decoration: underline; }
+                        .signature { margin-top: 25px; font-size: 14px; color: #424242; }
+                        .signature strong { color: #212121; }
+                        .footer { background: #212121; color: #9e9e9e; padding: 25px 30px; text-align: center; font-size: 12px; border-top: 1px solid #333; }
+                        .footer-address { margin-bottom: 15px; line-height: 1.5; color: #bdbdbd; }
+                        .social-links { margin: 18px 0 12px 0; text-align: center; }
+                        .social-btn { display: inline-block; margin: 0 8px; background: #333333; color: #ffffff !important; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: 500; transition: background 0.3s; }
+                        .social-btn.fb { background: #1877F2; }
+                        .social-btn.li { background: #0A66C2; }
+                        .social-btn.yt { background: #FF0000; }
+                        .copyright { margin-top: 15px; font-size: 11px; color: #757575; border-top: 1px solid #333; padding-top: 15px; }
                     </style>
                 </head>
                 <body>
                     <div class="card">
                         <div class="header">
-                            <h1>A.P. INDUSTRIES</h1>
-                            <p>Industrial Packaging Machinery & Heating Solutions</p>
+                            <img src="${logoUrl}" alt="A.P. Industries Logo" />
+                            <div class="header-subtext">Industrial Packaging Machinery & Heating Solutions</div>
                         </div>
-                        <div class="content">
-                            <h3>Thank You for Contacting Us, ${escapeHtml(name)}!</h3>
-                            <p>We have successfully received your inquiry regarding <strong>${escapeHtml(subject)}</strong>. Our engineering and sales team is currently reviewing your specifications and will respond to you shortly.</p>
 
-                            <div class="summary-box">
-                                <strong style="color: #0f172a;">Summary of your submission:</strong>
-                                <p><strong>Subject:</strong> ${escapeHtml(subject)}</p>
-                                <p><strong>Company:</strong> ${escapeHtml(company)}</p>
-                                <p><strong>Message / Specifications:</strong> ${escapeHtml(message)}</p>
+                        <div class="content">
+                            <div class="greeting">Dear ${escapeHtml(name)},</div>
+
+                            <div class="body-text">
+                                Thank you for reaching out to A.P. Industries.
                             </div>
 
-                            <p>If you have any urgent requirements or need immediate assistance, please feel free to call our sales hotline directly.</p>
-                            
-                            <p style="margin-top: 25px;">
-                                Best Regards,<br>
-                                <strong>Sales & Technical Support Team</strong><br>
-                                <strong>A.P. Industries</strong><br>
-                                Email: <a href="mailto:${adminEmail}">${adminEmail}</a>
-                            </p>
+                            <div class="body-text">
+                                We have received your inquiry and assigned it to our technical sales team. A representative will contact you shortly to assist with your requirements.
+                            </div>
+
+                            <div class="contact-box">
+                                <h4>Need Immediate Assistance?</h4>
+                                <div class="contact-item">
+                                    <strong>Phone:</strong> <a href="tel:+919726686181">+91 97266 86181</a>
+                                </div>
+                                <div class="contact-item">
+                                    <strong>Email:</strong> <a href="mailto:info.apindustries14@gmail.com">info.apindustries14@gmail.com</a>
+                                </div>
+                                <div class="contact-item">
+                                    <strong>Website:</strong> <a href="http://www.apindustriesindia.com" target="_blank">www.apindustriesindia.com</a>
+                                </div>
+                            </div>
+
+                            <div class="signature">
+                                Best regards,<br>
+                                <strong>A.P. Industries Team</strong>
+                            </div>
                         </div>
+
                         <div class="footer">
-                            Phase-IV, Pushkar Industrial Hub, Ahmedabad, Gujarat, India<br>
-                            &copy; ${new Date().getFullYear()} A.P. Industries. All rights reserved.
+                            <div class="footer-address">
+                                Phase-IV, Pushkar Industrial Hub, Ahmedabad, Gujarat, India
+                            </div>
+
+                            <div class="social-links">
+                                <a href="https://facebook.com" class="social-btn fb" target="_blank">Facebook</a>
+                                <a href="https://linkedin.com" class="social-btn li" target="_blank">LinkedIn</a>
+                                <a href="https://youtube.com" class="social-btn yt" target="_blank">YouTube</a>
+                            </div>
+
+                            <div class="copyright">
+                                &copy; ${new Date().getFullYear()} A.P. Industries. All rights reserved.
+                            </div>
                         </div>
                     </div>
                 </body>
