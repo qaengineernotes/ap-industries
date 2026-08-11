@@ -314,30 +314,31 @@
 
                 <form class="category-inquiry-form" action="#" method="POST">
                     <h3>Inquiry & Quote Request</h3>
+                    <input type="hidden" id="contact-subject" value="Industrial Heaters & Control Panels Inquiry">
                     <div class="form-group-grid">
                         <div class="form-control-wrap">
-                            <label for="name">Contact Person *</label>
-                            <input type="text" id="name" placeholder="Your Name" required>
+                            <label for="contact-name">Your Name *</label>
+                            <input type="text" id="contact-name" placeholder="John Doe" required>
                         </div>
                         <div class="form-control-wrap">
-                            <label for="company">Company Name *</label>
-                            <input type="text" id="company" placeholder="Company Name" required>
+                            <label for="contact-company">Company Name</label>
+                            <input type="text" id="contact-company" placeholder="ABC Corporation">
                         </div>
                     </div>
                     <div class="form-group-grid">
                         <div class="form-control-wrap">
-                            <label for="email">Corporate Email *</label>
-                            <input type="email" id="email" placeholder="name@company.com" required>
+                            <label for="contact-email">Email Address</label>
+                            <input type="email" id="contact-email" placeholder="john@company.com">
                         </div>
                         <div class="form-control-wrap">
-                            <label for="phone">Phone / Mobile</label>
-                            <input type="tel" id="phone" placeholder="+91 99999 99999">
+                            <label for="contact-phone">Phone Number *</label>
+                            <input type="tel" id="contact-phone" placeholder="+91 99999 99999" required>
                         </div>
                     </div>
                     <div class="form-control-wrap">
-                        <label for="message">Detailed Specifications / Machinery Models Needed *</label>
-                        <textarea id="message" rows="5"
-                            placeholder="Specify machine models of interest and details like speed, packaging dimensions, materials to seal, etc..."
+                        <label for="contact-message">Your Message / Specifications *</label>
+                        <textarea id="contact-message" rows="5"
+                            placeholder="Specify heater types, wattage, voltage, panel requirements, or custom thermal specifications..."
                             required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%; border: none;">Get Quote / Request

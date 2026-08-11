@@ -107,8 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const subjectSelect = form.querySelector('#contact-subject');
             let subject = '';
-            if (subjectSelect && subjectSelect.options && subjectSelect.selectedIndex >= 0) {
-                subject = subjectSelect.options[subjectSelect.selectedIndex].text;
+            if (subjectSelect) {
+                if (subjectSelect.tagName === 'SELECT' && subjectSelect.options && subjectSelect.selectedIndex >= 0) {
+                    subject = subjectSelect.options[subjectSelect.selectedIndex].text;
+                } else if (subjectSelect.value) {
+                    subject = subjectSelect.value.trim();
+                }
             }
             if (!subject || subject.includes('Select Subject')) {
                 subject = document.title.split('-')[0].trim() || 'General Inquiry';
@@ -124,8 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Client-side quick check
-            if (!email && !phone && !name) {
-                showBanner(false, 'Please fill out your contact details before submitting.');
+            if (!name || !phone) {
+                showBanner(false, 'Please fill out your Name and Phone Number before submitting.');
                 return;
             }
 

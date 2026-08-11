@@ -530,36 +530,31 @@
                         supply quotes or high-volume custom contracts.</p>
                 </div>
                 <form class="category-inquiry-form" action="#" method="POST">
-                    <h3>Inquiry Form</h3>
+                    <h3>Inquiry & Quote Request</h3>
+                    <input type="hidden" id="contact-subject" value="Industrial Packaging & Heating Categories Inquiry">
                     <div class="form-group-grid">
                         <div class="form-control-wrap">
-                            <label for="full-name">Full Name *</label>
-                            <input type="text" id="full-name" placeholder="John Doe" required>
+                            <label for="contact-name">Your Name *</label>
+                            <input type="text" id="contact-name" placeholder="John Doe" required>
                         </div>
                         <div class="form-control-wrap">
-                            <label for="company-name">Company Name *</label>
-                            <input type="text" id="company-name" placeholder="ABC Corp" required>
+                            <label for="contact-company">Company Name</label>
+                            <input type="text" id="contact-company" placeholder="ABC Corporation">
                         </div>
                     </div>
                     <div class="form-group-grid">
                         <div class="form-control-wrap">
-                            <label for="email-address">Email Address *</label>
-                            <input type="email" id="email-address" placeholder="john@company.com" required>
+                            <label for="contact-email">Email Address</label>
+                            <input type="email" id="contact-email" placeholder="john@company.com">
                         </div>
                         <div class="form-control-wrap">
-                            <label for="product-category">Interest Area *</label>
-                            <select id="product-category" required>
-                                <option value="" disabled selected>Select Category</option>
-                                <option value="machinery">Packaging Machinery</option>
-                                <option value="materials">Packaging Materials</option>
-                                <option value="heaters">Industrial Heaters & Panels</option>
-                                <option value="ovens">Industrial Ovens & Furnaces</option>
-                            </select>
+                            <label for="contact-phone">Phone Number *</label>
+                            <input type="tel" id="contact-phone" placeholder="+91 99999 99999" required>
                         </div>
                     </div>
                     <div class="form-control-wrap">
-                        <label for="message">Detailed Specifications / Requirements *</label>
-                        <textarea id="message" rows="4"
+                        <label for="contact-message">Your Message / Specifications *</label>
+                        <textarea id="contact-message" rows="4"
                             placeholder="Describe the dimensions, speed, temperature range, or quantity needed..."
                             required></textarea>
                     </div>
