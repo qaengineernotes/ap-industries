@@ -165,7 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (result.clientEmailSent) {
                             bannerHtml += ' A confirmation email has also been sent to <strong>' + email + '</strong>.';
                         } else {
-                            bannerHtml += ' (Confirmation email couldn\'t be sent to <strong>' + email + '</strong>. Our team will contact you directly).';
+                            bannerHtml += '<br><span style="font-size: 0.9em; opacity: 0.9;">(Note: Confirmation email to <strong>' + email + '</strong> failed. ' + 
+                                (result.clientEmailWarning ? 'Resend API message: ' + result.clientEmailWarning : 'Please check domain verification in Resend') + ')</span>';
                         }
                     }
                     showBanner(true, bannerHtml);
