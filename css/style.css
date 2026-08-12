@@ -1057,6 +1057,7 @@ footer {
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1127,7 +1128,7 @@ footer {
 .product-listing-hero {
     height: 35vh;
     min-height: 250px;
-    background: linear-gradient(rgba(33, 33, 33, 0.85), rgba(33, 33, 33, 0.9)), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background: linear-gradient(rgba(33, 33, 33, 0.85), rgba(33, 33, 33, 0.9)), url('../images/category-BackGround-Image.png');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -1600,10 +1601,12 @@ footer {
         grid-template-columns: repeat(2, 1fr);
         gap: 18px 10px;
     }
+
     .industry-item .industry-icon {
         width: 36px;
         height: 36px;
     }
+
     .industry-item .industry-title {
         font-size: 0.68rem;
     }
