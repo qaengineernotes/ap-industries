@@ -160,8 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    showBanner(true, '<strong>Success!</strong> Your inquiry has been sent to <strong>info.apindustries14@gmail.com</strong>.' +
-                        (email ? ' A confirmation email has also been sent to <strong>' + email + '</strong>.' : ''));
+                    let bannerHtml = '<strong>Success!</strong> Your inquiry has been sent to our team at <strong>info.apindustries14@gmail.com</strong>.';
+                    if (email) {
+                        if (result.clientEmailSent) {
+                            bannerHtml += ' A confirmation email has also been sent to <strong>' + email + '</strong>.';
+                        } else {
+                            bannerHtml += ' (Confirmation email couldn\'t be sent to <strong>' + email + '</strong>. Our team will contact you directly).';
+                        }
+                    }
+                    showBanner(true, bannerHtml);
                     form.reset();
                 } else {
                     showBanner(false, '<strong>Unable to send:</strong> ' + (result.error || 'Please try again later or contact us directly at info.apindustries14@gmail.com.'));

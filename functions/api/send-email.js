@@ -55,7 +55,7 @@ export async function onRequestPost(context) {
         }
 
         const adminEmail = env.ADMIN_EMAIL || 'info.apindustries14@gmail.com';
-        const senderEmail = env.SENDER_EMAIL || 'A.P. Industries <onboarding@resend.dev>';
+        const senderEmail = env.SENDER_EMAIL || env.sender_email || 'A.P. Industries <no-reply@apindustriesindia.com>';
         const formattedDate = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) + ' IST';
         const logoUrl = 'https://ap-industries.pages.dev/images/logo.png';
 
@@ -168,6 +168,8 @@ export async function onRequestPost(context) {
 
         // 2. Send Customer Confirmation Email (ONLY IF user submitted an Email address)
         let clientEmailSent = false;
+        let clientEmailWarning = null;
+
         if (email && email.includes('@')) {
             const customerEmailHtml = `
                 <!DOCTYPE html>
@@ -280,9 +282,11 @@ export async function onRequestPost(context) {
                 if (!customerResendRes.ok) {
                     const custData = await customerResendRes.json();
                     console.warn('Customer Email Warning:', custData);
+                    clientEmailWarning = custData.message || 'Unable to deliver customer confirmation email.';
                 }
             } catch (err) {
                 console.error('Failed to send customer confirmation:', err);
+                clientEmailWarning = err.message || 'Error executing email request.';
             }
         }
 
@@ -290,7 +294,8 @@ export async function onRequestPost(context) {
             JSON.stringify({
                 success: true,
                 message: 'Inquiry submitted successfully! Our team will get back to you shortly.',
-                clientEmailSent: clientEmailSent
+                clientEmailSent: clientEmailSent,
+                clientEmailWarning: clientEmailWarning
             }),
             { status: 200, headers: corsHeaders }
         );
