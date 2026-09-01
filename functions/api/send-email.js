@@ -254,7 +254,7 @@ export async function onRequestPost(context) {
                             <div class="contact-box">
                                 <h4>Need Immediate Assistance?</h4>
                                 <div class="contact-item">
-                                    <strong>Phone:</strong> <a href="tel:+919726686181">+91 97266 86181</a>
+                                    <strong>Phone:</strong> <a href="tel:+919824446258">+91 9824446258</a>
                                 </div>
                                 <div class="contact-item">
                                     <strong>Email:</strong> <a href="mailto:info.apindustries14@gmail.com">info.apindustries14@gmail.com</a>
